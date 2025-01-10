@@ -1,0 +1,155 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Forxo\\Downloads\\Zajęcia4-CaseStudy\\IIoTSim\\IIoTSim.Desktop\\IIoTSim.Desktop.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Forxo\\Downloads\\Zajęcia4-CaseStudy\\IIoTSim\\IIoTSim.Desktop\\IIoTSim.Desktop.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Forxo\\Downloads\\Zajęcia4-CaseStudy\\IIoTSim\\IIoTSim.Desktop\\IIoTSim.Desktop.csproj",
+        "projectName": "IIoTSim.Desktop",
+        "projectPath": "C:\\Users\\Forxo\\Downloads\\Zajęcia4-CaseStudy\\IIoTSim\\IIoTSim.Desktop\\IIoTSim.Desktop.csproj",
+        "packagesPath": "C:\\Users\\Forxo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Forxo\\Downloads\\Zajęcia4-CaseStudy\\IIoTSim\\IIoTSim.Desktop\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Forxo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0-windows"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0-windows7.0": {
+            "targetAlias": "net6.0-windows",
+            "projectReferences": {
+              "C:\\Users\\Forxo\\Downloads\\Zajęcia4-CaseStudy\\IIoTSim\\IIoTSim.Lib\\IIoTSim.Lib.csproj": {
+                "projectPath": "C:\\Users\\Forxo\\Downloads\\Zajęcia4-CaseStudy\\IIoTSim\\IIoTSim.Lib\\IIoTSim.Lib.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net6.0-windows7.0": {
+          "targetAlias": "net6.0-windows",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WPF": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Forxo\\Downloads\\Zajęcia4-CaseStudy\\IIoTSim\\IIoTSim.Lib\\IIoTSim.Lib.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Forxo\\Downloads\\Zajęcia4-CaseStudy\\IIoTSim\\IIoTSim.Lib\\IIoTSim.Lib.csproj",
+        "projectName": "IIoTSim.Lib",
+        "projectPath": "C:\\Users\\Forxo\\Downloads\\Zajęcia4-CaseStudy\\IIoTSim\\IIoTSim.Lib\\IIoTSim.Lib.csproj",
+        "packagesPath": "C:\\Users\\Forxo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Forxo\\Downloads\\Zajęcia4-CaseStudy\\IIoTSim\\IIoTSim.Lib\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Forxo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "CommunityToolkit.Mvvm": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Opc.UaFx.Advanced": {
+              "target": "Package",
+              "version": "[2.29.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

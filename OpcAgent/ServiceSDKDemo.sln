@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceSDKDemo.Console", "ServiceSDKDemo\ServiceSDKDemo.Console.csproj", "{0CB3C7D0-321B-499A-A368-EB77A628DDDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceSDKDemo.Library", "ServiceSDKDemo.Library\ServiceSDKDemo.Library.csproj", "{59652583-2FB6-4804-B623-8AD7433AC7C8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0CB3C7D0-321B-499A-A368-EB77A628DDDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CB3C7D0-321B-499A-A368-EB77A628DDDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CB3C7D0-321B-499A-A368-EB77A628DDDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CB3C7D0-321B-499A-A368-EB77A628DDDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59652583-2FB6-4804-B623-8AD7433AC7C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59652583-2FB6-4804-B623-8AD7433AC7C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59652583-2FB6-4804-B623-8AD7433AC7C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59652583-2FB6-4804-B623-8AD7433AC7C8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
