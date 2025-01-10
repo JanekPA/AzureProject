@@ -53,6 +53,18 @@
             "Microsoft.Azure.Devices": {
               "target": "Package",
               "version": "[1.40.0, )"
+            },
+            "Microsoft.Azure.Devices.Client": {
+              "target": "Package",
+              "version": "[1.42.3, )"
+            },
+            "OPCFoundation.NetStandard.Opc.Ua": {
+              "target": "Package",
+              "version": "[1.5.374.158, )"
+            },
+            "Opc.UaFx.Client": {
+              "target": "Package",
+              "version": "[2.42.5, )"
             }
           },
           "imports": [

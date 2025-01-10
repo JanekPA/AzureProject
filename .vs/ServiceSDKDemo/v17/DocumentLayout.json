@@ -3,8 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{0CB3C7D0-321B-499A-A368-EB77A628DDDA}|ServiceSDKDemo\\ServiceSDKDemo.Console.csproj|c:\\users\\forxo\\documents\\github\\azureproject\\servicesdkdemo\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0CB3C7D0-321B-499A-A368-EB77A628DDDA}|ServiceSDKDemo\\ServiceSDKDemo.Console.csproj|solutionrelative:servicesdkdemo\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0CB3C7D0-321B-499A-A368-EB77A628DDDA}|ServiceSDKDemo\\ServiceSDKDemo.Console.csproj|c:\\users\\forxo\\documents\\github\\azureproject\\servicesdkdemo\\publishednotes.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{0CB3C7D0-321B-499A-A368-EB77A628DDDA}|ServiceSDKDemo\\ServiceSDKDemo.Console.csproj|solutionrelative:servicesdkdemo\\publishednotes.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{0CB3C7D0-321B-499A-A368-EB77A628DDDA}|ServiceSDKDemo\\ServiceSDKDemo.Console.csproj|c:\\users\\forxo\\documents\\github\\azureproject\\servicesdkdemo\\featureselector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0CB3C7D0-321B-499A-A368-EB77A628DDDA}|ServiceSDKDemo\\ServiceSDKDemo.Console.csproj|solutionrelative:servicesdkdemo\\featureselector.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{59652583-2FB6-4804-B623-8AD7433AC7C8}|ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj|c:\\users\\forxo\\documents\\github\\azureproject\\servicesdkdemo.library\\iothubmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{59652583-2FB6-4804-B623-8AD7433AC7C8}|ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj|solutionrelative:servicesdkdemo.library\\iothubmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{59652583-2FB6-4804-B623-8AD7433AC7C8}|ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj|c:\\users\\forxo\\documents\\github\\azureproject\\servicesdkdemo.library\\servicesdkdemo.library.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{59652583-2FB6-4804-B623-8AD7433AC7C8}|ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj|solutionrelative:servicesdkdemo.library\\servicesdkdemo.library.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,20 +30,68 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "publishednotes.json",
+              "DocumentMoniker": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\ServiceSDKDemo\\publishednotes.json",
+              "RelativeDocumentMoniker": "ServiceSDKDemo\\publishednotes.json",
+              "ToolTip": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\ServiceSDKDemo\\publishednotes.json",
+              "RelativeToolTip": "ServiceSDKDemo\\publishednotes.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-01-08T16:36:25.504Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "IoTHubManager.cs",
+              "DocumentMoniker": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\ServiceSDKDemo.Library\\IoTHubManager.cs",
+              "RelativeDocumentMoniker": "ServiceSDKDemo.Library\\IoTHubManager.cs",
+              "ToolTip": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\ServiceSDKDemo.Library\\IoTHubManager.cs",
+              "RelativeToolTip": "ServiceSDKDemo.Library\\IoTHubManager.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAwwCoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-08T15:54:26.316Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ServiceSDKDemo.Library.csproj",
+              "DocumentMoniker": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj",
+              "RelativeDocumentMoniker": "ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj",
+              "ToolTip": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj",
+              "RelativeToolTip": "ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-01-08T15:57:45.687Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\ServiceSDKDemo\\Program.cs",
+              "RelativeDocumentMoniker": "ServiceSDKDemo\\Program.cs",
+              "ToolTip": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\ServiceSDKDemo\\Program.cs",
+              "RelativeToolTip": "ServiceSDKDemo\\Program.cs",
+              "ViewState": "AgIAAKkAAAAAAAAAAAAAAMEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-08T14:42:24Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "FeatureSelector.cs",
               "DocumentMoniker": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\ServiceSDKDemo\\FeatureSelector.cs",
               "RelativeDocumentMoniker": "ServiceSDKDemo\\FeatureSelector.cs",
               "ToolTip": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\ServiceSDKDemo\\FeatureSelector.cs",
               "RelativeToolTip": "ServiceSDKDemo\\FeatureSelector.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADEAAAAAAAAAAADwv0oAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-06T11:19:56.959Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-06T11:19:56.959Z"
             }
           ]
         }
