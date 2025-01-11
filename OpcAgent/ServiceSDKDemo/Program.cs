@@ -86,6 +86,7 @@ namespace IoTAgent
                 OpcUaEndpoint = "opc.tcp://localhost:4840",
                 IoTHubConnectionString = "HostName=IoTProject2025.azure-devices.net;DeviceId=DeviceDemoSdk1;SharedAccessKey=pBotxwQFaKgccxxgnks/ZF5gxXgNE++kH3N4rIboxJg=",
                 TelemetryInterval = 5000,
+                StorageConnectionString = "<Your Storage Connection String>"
             };
         }
     }
@@ -149,7 +150,7 @@ namespace IoTAgent
             try
             {
                 // Zmieniamy wynik BrowseNode, aby zawsze traktować go jako kolekcję
-                var nodeList = new List<OpcNodeInfo> { _client.BrowseNode("ns=2;s=RootFolder") };
+                var nodeList = new List<OpcNodeInfo> { _client.BrowseNode("ns=2;s=Device 1/RootFolder") };
 
                 // Teraz możemy używać LINQ, ponieważ mamy kolekcję (List)
                 var nodeIds = nodeList.Select(node => node.NodeId.Value.ToString());
@@ -167,10 +168,10 @@ namespace IoTAgent
         {
             try
             {
-                var productionStatus = _client.ReadNode("ns=2;s=ProductionStatus").Value;
-                var goodCount = _client.ReadNode("ns=2;s=GoodCount").Value;
-                var badCount = _client.ReadNode("ns=2;s=BadCount").Value;
-                var temperature = _client.ReadNode("ns=2;s=Temperature").Value;
+                var productionStatus = _client.ReadNode("ns=2;s=Device 1/ProductionStatus").Value;
+                var goodCount = _client.ReadNode("ns=2;s=Device 1/GoodCount").Value;
+                var badCount = _client.ReadNode("ns=2;s=Device 1/BadCount").Value;
+                var temperature = _client.ReadNode("ns=2;s=Device 1/Temperature").Value;
 
                 Console.WriteLine($"Read values: ProductionStatus={productionStatus}, GoodCount={goodCount}, BadCount={badCount}, Temperature={temperature}");
 
@@ -195,8 +196,8 @@ namespace IoTAgent
             {
                 return new
                 {
-                    ProductionRate = Convert.ToInt32(_client.ReadNode("ns=2;s=ProductionRate").Value),
-                    DeviceErrors = Convert.ToInt32(_client.ReadNode("ns=2;s=DeviceErrors").Value)
+                    ProductionRate = Convert.ToInt32(_client.ReadNode("ns=2;s=Device 1/ProductionRate").Value),
+                    DeviceErrors = Convert.ToInt32(_client.ReadNode("ns=2;s=Device 1/DeviceErrors").Value)
                 };
             }
             catch (Exception ex)
@@ -208,7 +209,7 @@ namespace IoTAgent
 
         public void SetDesiredProductionRate(int productionRate)
         {
-            _client.WriteNode("ns=2;s=ProductionRate", productionRate);
+            _client.WriteNode("ns=2;s=Device 1/ProductionRate", productionRate);
         }
     }
 
