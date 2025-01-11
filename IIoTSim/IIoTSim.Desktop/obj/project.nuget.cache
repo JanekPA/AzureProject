@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7/FZCU9mYHs=",
+  "dgSpecHash": "9r4gM/dZ+tA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Forxo\\Downloads\\Zajęcia4-CaseStudy\\IIoTSim\\IIoTSim.Desktop\\IIoTSim.Desktop.csproj",
+  "projectFilePath": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\IIoTSim\\IIoTSim.Desktop\\IIoTSim.Desktop.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Forxo\\.nuget\\packages\\communitytoolkit.mvvm\\8.0.0\\communitytoolkit.mvvm.8.0.0.nupkg.sha512",
     "C:\\Users\\Forxo\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",

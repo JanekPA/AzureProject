@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj": {}
+    "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj": {
+    "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj",
+        "projectUniqueName": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj",
         "projectName": "ServiceSDKDemo.Library",
-        "projectPath": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj",
+        "projectPath": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo.Library\\ServiceSDKDemo.Library.csproj",
         "packagesPath": "C:\\Users\\Forxo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\ServiceSDKDemo.Library\\obj\\",
+        "outputPath": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo.Library\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

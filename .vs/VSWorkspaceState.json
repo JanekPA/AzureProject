@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\IIoTSim",
+    "\\IIoTSim\\IIoTSim.Lib",
+    "\\OpcAgent",
+    "\\OpcAgent\\ServiceSDKDemo",
+    "\\OpcAgent\\ServiceSDKDemo.Library"
+  ],
+  "SelectedNode": "\\IIoTSim\\IIoTSim.sln",
+  "PreviewInSolutionExplorer": false
+}

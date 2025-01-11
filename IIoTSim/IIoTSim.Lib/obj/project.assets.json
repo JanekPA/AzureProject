@@ -683,11 +683,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Forxo\\Downloads\\Zajęcia4-CaseStudy\\IIoTSim\\IIoTSim.Lib\\IIoTSim.Lib.csproj",
+      "projectUniqueName": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\IIoTSim\\IIoTSim.Lib\\IIoTSim.Lib.csproj",
       "projectName": "IIoTSim.Lib",
-      "projectPath": "C:\\Users\\Forxo\\Downloads\\Zajęcia4-CaseStudy\\IIoTSim\\IIoTSim.Lib\\IIoTSim.Lib.csproj",
+      "projectPath": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\IIoTSim\\IIoTSim.Lib\\IIoTSim.Lib.csproj",
       "packagesPath": "C:\\Users\\Forxo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Forxo\\Downloads\\Zajęcia4-CaseStudy\\IIoTSim\\IIoTSim.Lib\\obj\\",
+      "outputPath": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\IIoTSim\\IIoTSim.Lib\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

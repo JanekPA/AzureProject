@@ -23,3 +23,16 @@ C:\Users\Forxo\Documents\GitHub\AzureProject\ServiceSDKDemo.Library\obj\Debug\ne
 C:\Users\Forxo\Documents\GitHub\AzureProject\ServiceSDKDemo.Library\obj\Debug\net8.0\refint\ServiceSDKDemo.Library.dll
 C:\Users\Forxo\Documents\GitHub\AzureProject\ServiceSDKDemo.Library\obj\Debug\net8.0\ServiceSDKDemo.Library.pdb
 C:\Users\Forxo\Documents\GitHub\AzureProject\ServiceSDKDemo.Library\obj\Debug\net8.0\ref\ServiceSDKDemo.Library.dll
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo.Library\bin\Debug\net8.0\ServiceSDKDemo.Library.deps.json
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo.Library\bin\Debug\net8.0\ServiceSDKDemo.Library.dll
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo.Library\bin\Debug\net8.0\ServiceSDKDemo.Library.pdb
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo.Library\obj\Debug\net8.0\ServiceSDKDemo.Library.csproj.AssemblyReference.cache
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo.Library\obj\Debug\net8.0\ServiceSDKDemo.Library.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo.Library\obj\Debug\net8.0\ServiceSDKDemo.Library.AssemblyInfoInputs.cache
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo.Library\obj\Debug\net8.0\ServiceSDKDemo.Library.AssemblyInfo.cs
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo.Library\obj\Debug\net8.0\ServiceSDKDemo.Library.csproj.CoreCompileInputs.cache
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo.Library\obj\Debug\net8.0\ServiceSDKDemo.Library.sourcelink.json
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo.Library\obj\Debug\net8.0\ServiceSDKDemo.Library.dll
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo.Library\obj\Debug\net8.0\refint\ServiceSDKDemo.Library.dll
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo.Library\obj\Debug\net8.0\ServiceSDKDemo.Library.pdb
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo.Library\obj\Debug\net8.0\ref\ServiceSDKDemo.Library.dll

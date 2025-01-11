@@ -2,8 +2,10 @@
 using System.Linq.Expressions;
 using System.Net.Sockets;
 using System.Text;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
 using Microsoft.Azure.Devices;
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Shared;
@@ -18,7 +20,7 @@ namespace IoTAgent
         static async Task Main(string[] args)
         {
             var config = ConfigLoader.Load();
-
+            var storageService = new AzureStorageService(config.StorageConnectionString);
             Console.WriteLine("Starting IoT Agent...");
 
             var opcService = new OpcUaService(config.OpcUaEndpoint);
@@ -35,8 +37,32 @@ namespace IoTAgent
                 while (true)
                 {
                     var telemetryData = opcService.ReadTelemetryData();
+                    if (telemetryData != null)
+                    {
+                        await iotHubService.SendTelemetryAsync(telemetryData);
+
+                        string blobName = $"telemetry_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
+                        string jsonData = JsonSerializer.Serialize(telemetryData);
+                        await storageService.UploadJsonAsync("iottelemetry", blobName, jsonData);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Telemetry data is null. Skipping telemetry send.");
+                    }
                     await iotHubService.SendTelemetryAsync(telemetryData);
-                    await iotHubService.UpdateReportedPropertiesAsync(opcService.GetDeviceState());
+                    var deviceState = opcService.GetDeviceState();
+                    if (deviceState != null)
+                    {
+                        await iotHubService.UpdateReportedPropertiesAsync(deviceState);
+                        // Zapisywanie stanu urządzenia do Blob Storage
+                        string stateBlobName = $"state_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
+                        string stateJsonData = JsonSerializer.Serialize(deviceState);
+                        await storageService.UploadJsonAsync("iottelemetry", stateBlobName, stateJsonData);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Device state is null. Skipping reported properties update.");
+                    }
                     await Task.Delay(config.TelemetryInterval);
                 }
             }
@@ -59,7 +85,7 @@ namespace IoTAgent
             {
                 OpcUaEndpoint = "opc.tcp://localhost:4840",
                 IoTHubConnectionString = "HostName=IoTProject2025.azure-devices.net;DeviceId=DeviceDemoSdk1;SharedAccessKey=pBotxwQFaKgccxxgnks/ZF5gxXgNE++kH3N4rIboxJg=",
-                TelemetryInterval = 5000
+                TelemetryInterval = 5000,
             };
         }
     }
@@ -69,7 +95,36 @@ namespace IoTAgent
         public string OpcUaEndpoint { get; set; }
         public string IoTHubConnectionString { get; set; }
         public int TelemetryInterval { get; set; }
+        public string StorageConnectionString { get; set; }
     }
+    public class AzureStorageService
+    {
+        private readonly BlobServiceClient _blobServiceClient;
+
+        public AzureStorageService(string connectionString)
+        {
+            _blobServiceClient = new BlobServiceClient(connectionString);
+        }
+
+        public async Task UploadJsonAsync(string containerName, string blobName, string jsonData)
+        {
+            // Uzyskaj klienta kontenera
+            var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+
+            // Upewnij się, że kontener istnieje
+            await containerClient.CreateIfNotExistsAsync();
+
+            // Utwórz klienta blobu
+            var blobClient = containerClient.GetBlobClient(blobName);
+
+            // Prześlij dane
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(jsonData));
+            await blobClient.UploadAsync(stream, overwrite: true);
+
+            Console.WriteLine($"Blob uploaded: {blobName}");
+        }
+    }
+
     public class OpcUaService
     {
         private readonly OpcClient _client;
@@ -78,6 +133,7 @@ namespace IoTAgent
         {
             _client = new OpcClient(endpoint);
         }
+
 
         public void Connect()
         {
@@ -88,23 +144,48 @@ namespace IoTAgent
         {
             _client.Disconnect();
         }
+        public IEnumerable<string> GetNodeList()
+        {
+            try
+            {
+                // Zmieniamy wynik BrowseNode, aby zawsze traktować go jako kolekcję
+                var nodeList = new List<OpcNodeInfo> { _client.BrowseNode("ns=2;s=RootFolder") };
 
+                // Teraz możemy używać LINQ, ponieważ mamy kolekcję (List)
+                var nodeIds = nodeList.Select(node => node.NodeId.Value.ToString());
+
+                Console.WriteLine("Nodes on server: " + string.Join(", ", nodeIds));
+                return nodeIds;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error browsing nodes: {ex.Message}");
+                return Enumerable.Empty<string>();
+            }
+        }
         public object ReadTelemetryData()
         {
             try
             {
+                var productionStatus = _client.ReadNode("ns=2;s=ProductionStatus").Value;
+                var goodCount = _client.ReadNode("ns=2;s=GoodCount").Value;
+                var badCount = _client.ReadNode("ns=2;s=BadCount").Value;
+                var temperature = _client.ReadNode("ns=2;s=Temperature").Value;
+
+                Console.WriteLine($"Read values: ProductionStatus={productionStatus}, GoodCount={goodCount}, BadCount={badCount}, Temperature={temperature}");
+
                 return new
                 {
-                    ProductionStatus = Convert.ToInt32(_client.ReadNode("ns=2;s=ProductionStatus")),
-                    GoodCount = Convert.ToInt32(_client.ReadNode("ns=2;s=GoodCount")),
-                    BadCount = Convert.ToInt32(_client.ReadNode("ns=2;s=BadCount")),
-                    Temperature = Convert.ToDouble(_client.ReadNode("ns=2;s=Temperature"))
+                    ProductionStatus = Convert.ToInt32(productionStatus),
+                    GoodCount = Convert.ToInt32(goodCount),
+                    BadCount = Convert.ToInt32(badCount),
+                    Temperature = Convert.ToDouble(temperature)
                 };
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error reading telemetry data: {ex.Message}");
-                return null; // Możesz również zwrócić wartości domyślne
+                return null;
             }
         }
 
@@ -114,8 +195,8 @@ namespace IoTAgent
             {
                 return new
                 {
-                    ProductionRate = Convert.ToInt32(_client.ReadNode("ns=2;s=ProductionRate")),
-                    DeviceErrors = Convert.ToInt32(_client.ReadNode("ns=2;s=DeviceErrors"))
+                    ProductionRate = Convert.ToInt32(_client.ReadNode("ns=2;s=ProductionRate").Value),
+                    DeviceErrors = Convert.ToInt32(_client.ReadNode("ns=2;s=DeviceErrors").Value)
                 };
             }
             catch (Exception ex)
