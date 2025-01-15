@@ -3802,9 +3802,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo\\ServiceSDKDemo.Console.csproj",
-      "projectName": "ServiceSDKDemo.Console",
-      "projectPath": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo\\ServiceSDKDemo.Console.csproj",
+      "projectUniqueName": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo\\IoTAgent.Services.csproj",
+      "projectName": "IoTAgent.Services",
+      "projectPath": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo\\IoTAgent.Services.csproj",
       "packagesPath": "C:\\Users\\Forxo\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo\\obj\\",
       "projectStyle": "PackageReference",

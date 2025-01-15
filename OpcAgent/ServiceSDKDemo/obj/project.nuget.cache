@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "IVTAS6ELj/8=",
+  "dgSpecHash": "J5zkxrJzDas=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo\\ServiceSDKDemo.Console.csproj",
+  "projectFilePath": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo\\IoTAgent.Services.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Forxo\\.nuget\\packages\\azure.core\\1.44.1\\azure.core.1.44.1.nupkg.sha512",
     "C:\\Users\\Forxo\\.nuget\\packages\\azure.storage.blobs\\12.19.1\\azure.storage.blobs.12.19.1.nupkg.sha512",

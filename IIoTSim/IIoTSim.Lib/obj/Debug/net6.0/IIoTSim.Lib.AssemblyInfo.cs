@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IIoTSim.Lib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f8bf771b0da54affe930d9f333903f20b09ffda2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e9725e46ae8ccad35144c020d3a735d9dff5e527")]
 [assembly: System.Reflection.AssemblyProductAttribute("IIoTSim.Lib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IIoTSim.Lib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
