@@ -49,15 +49,7 @@ namespace IoTAgent.Services
                 // Start monitoring device twin properties (run in parallel)
                 Console.WriteLine("Starting monitoring device twin properties...");
 
-                var monitorTwinTask = iotHubService.MonitorDeviceTwinAsync(
-
-                    async (key, value) =>
-                    {
-                        if (key == "ProductionRate" && value is int productionRate)
-                        {
-                            opcUaService.SetProductionRate(config.DeviceId, productionRate);
-                        }
-                    });
+                
                 // Start telemetry loop
                 Console.WriteLine("Starting telemetry loop...");
                 var knownDevices = new HashSet<int>();
@@ -86,23 +78,20 @@ namespace IoTAgent.Services
                                 Console.WriteLine($"New device detected: Device {deviceId}");
                                 
                             }
-                            var telemetryData = opcUaService.ReadTelemetryData(deviceId);
+                            var deviceState = opcUaService.ReadDeviceState(deviceId);
+
+                            var telemetryData = opcUaService.ReadTelemetryData(deviceState.DeviceId);
                             if (telemetryData != null)
                             {
                                 await iotHubService.SendTelemetryAsync(telemetryData);
 
                             }
-                            // Initialize monitoring desired properties
-                            await iotHubService.MonitorDesiredPropertiesAsync(async (key, value) =>
+                            await opcUaService.CheckAndUpdateDeviceErrorsAsync(deviceState.DeviceId, async errors =>
                             {
-                                if (key == "ProductionRate" && value is int productionRate)
-                                {
-                                    opcUaService.SetProductionRate(config.DeviceId, productionRate);
-                                    await iotHubService.UpdateReportedPropertiesAsync("ProductionRate", productionRate);
-                                    Console.WriteLine("Attempted to update Reported Properties: ProductionRate = " + productionRate);
-                                }
+                                await iotHubService.UpdateReportedDeviceErrorsAsync(errors);
                             });
-                            var deviceState = opcUaService.ReadDeviceState(deviceId);
+                            await iotHubService.MonitorDeviceTwinAsync(opcUaService, deviceState.DeviceId);
+                            
                             Console.WriteLine("    Device State    ");
                             Console.WriteLine($"Device ID: {deviceState.DeviceId}");
                             Console.WriteLine($"Device Errors: {deviceState.DeviceErrors}");
@@ -117,7 +106,7 @@ namespace IoTAgent.Services
                     }
                 }
                 // Wait for tasks to finish
-                await Task.WhenAny(monitorTwinTask,receiveMessagesTask);
+                await Task.WhenAny(receiveMessagesTask);
             }
             catch (Exception ex)
             {

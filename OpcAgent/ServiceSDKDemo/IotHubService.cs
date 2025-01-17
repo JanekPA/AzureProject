@@ -10,16 +10,20 @@ using System.Threading.Tasks;
 using IoTAgent;
 using static IoTAgent.Services.Program;
 using System.Linq.Expressions;
+using Microsoft.Win32;
+using Microsoft.Azure.Devices;
 
 namespace IoTAgent.Services
 {
     public class IoTHubService
     {
         private readonly DeviceClient _deviceClient;
+        private readonly RegistryManager registry;
+
 
         public IoTHubService(string connectionString)
         {
-            _deviceClient = DeviceClient.CreateFromConnectionString(connectionString, TransportType.Mqtt);
+            _deviceClient = DeviceClient.CreateFromConnectionString(connectionString, Microsoft.Azure.Devices.Client.TransportType.Mqtt);
             Console.WriteLine("Device client created successfully.");
         }
 
@@ -27,7 +31,7 @@ namespace IoTAgent.Services
         public async Task SendTelemetryAsync(dynamic telemetryData)
         {
             var messageString = JsonConvert.SerializeObject(telemetryData);
-            var message = new Message(Encoding.UTF8.GetBytes(messageString))
+            var message = new Microsoft.Azure.Devices.Client.Message(Encoding.UTF8.GetBytes(messageString))
             {
                 ContentType = "application/json",
                 ContentEncoding = "utf-8"
@@ -87,71 +91,104 @@ namespace IoTAgent.Services
 
             Console.WriteLine("Direct methods initialized.");
         }
+        public async Task MonitorProductionRateAsync(int deviceId, Func<int, Task> updateReportedTwinAsync)
+        {
+            try
+            {
+                //var currentRate = (int)_deviceClient.ReadNode($"ns=2;s=Device {deviceId}/ProductionRate").Value;
+                //Console.WriteLine($"Current ProductionRate for Device {deviceId}: {currentRate}");
+                //await updateReportedTwinAsync(currentRate);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error monitoring ProductionRate for Device {deviceId}: {ex.Message}");
+            }
+        }
+        public async Task UpdateReportedProductionRateAsync(int productionRate)
+        {
+            var reportedProperties = new TwinCollection
+            {
+                ["ProductionRate"] = productionRate
+            };
+            await _deviceClient.UpdateReportedPropertiesAsync(reportedProperties);
+            Console.WriteLine($"Reported ProductionRate updated to {productionRate}.");
+        }
 
         // This method listens to changes in device twin properties
-        public async Task MonitorDeviceTwinAsync(Func<string, object, Task> onPropertyChanged)
+        public async Task MonitorDeviceTwinAsync(OpcUaService opcService, int deviceId)
         {
-            // Monitor changes on device twin properties
-            var twin = await _deviceClient.GetTwinAsync();
 
-            // Check for changes in desired properties periodically (simplified approach)
-            while (true)
+            await _deviceClient.SetDesiredPropertyUpdateCallbackAsync(async (desiredProperties, context) =>
             {
-                twin = await _deviceClient.GetTwinAsync();
-                foreach (var property in twin.Properties.Desired)
+                foreach (KeyValuePair<string, object> property in desiredProperties)
                 {
-                    // Rzutowanie na typ KeyValuePair
-                    if (property is KeyValuePair<string, object> propertyKeyValue)
+                    Console.WriteLine($"Key: {property.Key}, Value: {property.Value}");
+                    if (property.Key == "ProductionRate" && int.TryParse(property.Value.ToString(), out int newRate))
                     {
-                        await onPropertyChanged(propertyKeyValue.Key, propertyKeyValue.Value);
+                        opcService.SetProductionRate(deviceId, newRate);
+                        Console.WriteLine($"Production rate updated to {newRate}%.");
+
+
+                        // Teraz aktualizujemy "reported" z nową wartością
+
+                        var reportedProperties = new TwinCollection
+                        {
+                            ["ProductionRate"] = newRate
+                        };
+                        Console.WriteLine("Updating reported properties...");
+                        await _deviceClient.UpdateReportedPropertiesAsync(reportedProperties);
+                        opcService.SetProductionRate(deviceId,newRate);
+                        Console.WriteLine("Reported properties updated.");
                     }
                 }
+            }, null);
+            var twin = await _deviceClient.GetTwinAsync();
+            Console.WriteLine($"Current twin properties: {twin.ToJson()}");
+            Console.WriteLine("Device Twin monitoring initialized.");
+        }
 
-                await Task.Delay(5000); // delay for checking updates
-            }
+        public async Task UpdateReportedDeviceErrorsAsync(int deviceErrors)
+        {
+            var reportedProperties = new TwinCollection
+            {
+                ["DeviceErrors"] = deviceErrors
+            };
+            await _deviceClient.UpdateReportedPropertiesAsync(reportedProperties);
+            Console.WriteLine($"Reported DeviceErrors updated to {deviceErrors}.");
+        }
+        private string AnalyzeErrors(int deviceErrors)
+        {
+            List<string> errors = new();
+
+            if ((deviceErrors & Convert.ToInt32(Errors.Unknown)) != 0) errors.Add("Unknown");
+            if ((deviceErrors & Convert.ToInt32(Errors.SensorFailue)) != 0) errors.Add("Sensor Failure");
+            if ((deviceErrors & Convert.ToInt32(Errors.PowerFailure)) != 0) errors.Add("Power Failure");
+            if ((deviceErrors & Convert.ToInt32(Errors.EmergencyStop)) != 0) errors.Add("Emergency Stop");
+
+            var result = errors.Count > 0 ? string.Join(", ", errors) : "No errors";
+            Console.WriteLine($"Analyzed errors for Device: {result}");
+            return result;
         }
         // Update reported properties for ProductionRate and DeviceErrors
-        public async Task UpdateReportedPropertiesAsync(string key, object value)
+        public async Task UpdateReportedPropertiesAsync(Dictionary<string, object> reportedProperties)
         {
-            try
+            if (reportedProperties == null)
             {
-                var reportedProperties = new TwinCollection();
-                reportedProperties[key] = value;
-                await _deviceClient.UpdateReportedPropertiesAsync(reportedProperties);
-                Console.WriteLine($"Updated reported property: {key} = {value}");
+                throw new ArgumentNullException(nameof(reportedProperties), "Reported properties cannot be null.");
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error updating reported property {key}: {ex.Message}");
-            }
-        }
 
-        // Handle changes to desired properties
-        public async Task MonitorDesiredPropertiesAsync(Func<string, object, Task> onDesiredPropertyChanged)
-        {
-            try
+            var twinCollection = new TwinCollection();
+            foreach (var property in reportedProperties)
             {
-                await _deviceClient.SetDesiredPropertyUpdateCallbackAsync((desiredProperties, context) =>
-                {
-                    foreach (var property in desiredProperties)
-                    {
-                        if (property is KeyValuePair<string, object> propertyKeyValue)
-                        {
-                            if (propertyKeyValue.Key != null && propertyKeyValue.Value != null)
-                            {
-                                Console.WriteLine($"Desired property changed: {propertyKeyValue.Key} = {propertyKeyValue.Value}");
-                                onDesiredPropertyChanged(propertyKeyValue.Key, propertyKeyValue.Value).Wait();
-                            }
-                        }
-                    }
-                    return Task.CompletedTask;
-                }, null);
+                twinCollection[property.Key] = property.Value;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error monitoring desired properties: {ex.Message}");
-            }
+
+            await _deviceClient.UpdateReportedPropertiesAsync(twinCollection);
+            
+            Console.WriteLine("Reported properties updated: " + twinCollection.ToJson());
         }
+        // Handle changes to desired properties
+
     }
 
     [Flags]

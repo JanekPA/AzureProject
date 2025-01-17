@@ -105,21 +105,11 @@ namespace IIoTSim.Desktop
                     }
                 }
                 await Task.Delay(1000, cancellationToken);
-
             }
         }
 
         private void Devices_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.NewItems != null)
-            {
-                foreach (DeviceModel newDevice in e.NewItems)
-                {
-                    Console.WriteLine($"New device added: {newDevice.Name}");
-                    var machineNode = AddDevice(newDevice);
-                    folderNodes.Add(machineNode);
-                }
-            }
             Initialize();
         }
 
@@ -174,7 +164,7 @@ namespace IIoTSim.Desktop
 
             var emergencyStopMethodNode = new OpcMethodNode(machineNode, nameof(device.EmergencyStop), new Action(device.EmergencyStop));
             var resetErrorMethodNode = new OpcMethodNode(machineNode, nameof(device.ResetErrorStatus), new Action(device.ResetErrorStatus));
-            
+
             return machineNode;
         }
 
@@ -190,7 +180,6 @@ namespace IIoTSim.Desktop
             if (newValue > 100) newValue = 100;
             if (newValue < 0) newValue = 0;
             device.ProductionRate = newValue;
-            Console.WriteLine($"Device {device.Name}: ProductionStatus={device.ProductionStatus}, GoodCount={device.GoodCount}, BadCount={device.BadCount}, Temperature={device.Temperature}");
             return new OpcVariableValue<object>(newValue, value.Timestamp ?? DateTime.MinValue, value.Status);
         }
 

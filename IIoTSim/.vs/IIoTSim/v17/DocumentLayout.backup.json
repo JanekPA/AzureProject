@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\IIoTSim\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E21D3D18-D2F6-46EF-A422-A17B0908A81D}|IIoTSim.Lib\\IIoTSim.Lib.csproj|c:\\users\\forxo\\documents\\github\\azureproject\\iiotsim\\iiotsim.lib\\viewmodel\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E21D3D18-D2F6-46EF-A422-A17B0908A81D}|IIoTSim.Lib\\IIoTSim.Lib.csproj|solutionrelative:iiotsim.lib\\viewmodel\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{E21D3D18-D2F6-46EF-A422-A17B0908A81D}|IIoTSim.Lib\\IIoTSim.Lib.csproj|c:\\users\\forxo\\documents\\github\\azureproject\\iiotsim\\iiotsim.lib\\model\\devicemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E21D3D18-D2F6-46EF-A422-A17B0908A81D}|IIoTSim.Lib\\IIoTSim.Lib.csproj|solutionrelative:iiotsim.lib\\model\\devicemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E21D3D18-D2F6-46EF-A422-A17B0908A81D}|IIoTSim.Lib\\IIoTSim.Lib.csproj|c:\\users\\forxo\\documents\\github\\azureproject\\iiotsim\\iiotsim.lib\\simulationserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E21D3D18-D2F6-46EF-A422-A17B0908A81D}|IIoTSim.Lib\\IIoTSim.Lib.csproj|solutionrelative:iiotsim.lib\\simulationserver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E21D3D18-D2F6-46EF-A422-A17B0908A81D}|IIoTSim.Lib\\IIoTSim.Lib.csproj|c:\\users\\forxo\\documents\\github\\azureproject\\iiotsim\\iiotsim.lib\\viewmodel\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E21D3D18-D2F6-46EF-A422-A17B0908A81D}|IIoTSim.Lib\\IIoTSim.Lib.csproj|solutionrelative:iiotsim.lib\\viewmodel\\mainwindowviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E21D3D18-D2F6-46EF-A422-A17B0908A81D}|IIoTSim.Lib\\IIoTSim.Lib.csproj|c:\\users\\forxo\\documents\\github\\azureproject\\iiotsim\\iiotsim.lib\\model\\enums\\deviceerror.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -42,17 +42,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "MainWindowViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\IIoTSim\\IIoTSim.Lib\\ViewModel\\MainWindowViewModel.cs",
               "RelativeDocumentMoniker": "IIoTSim.Lib\\ViewModel\\MainWindowViewModel.cs",
               "ToolTip": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\IIoTSim\\IIoTSim.Lib\\ViewModel\\MainWindowViewModel.cs",
               "RelativeToolTip": "IIoTSim.Lib\\ViewModel\\MainWindowViewModel.cs",
-              "ViewState": "AgIAAGgAAAAAAAAAAAAtwF8AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAADAAAAAAAAAAAAAqwHwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-08T19:00:00.774Z",
               "EditorCaption": ""
@@ -66,31 +66,30 @@
               "ToolTip": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\IIoTSim\\IIoTSim.Desktop\\App.xaml",
               "RelativeToolTip": "IIoTSim.Desktop\\App.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-01-08T18:58:06.339Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-08T18:58:06.339Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "DeviceModel.cs",
               "DocumentMoniker": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\IIoTSim\\IIoTSim.Lib\\Model\\DeviceModel.cs",
               "RelativeDocumentMoniker": "IIoTSim.Lib\\Model\\DeviceModel.cs",
               "ToolTip": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\IIoTSim\\IIoTSim.Lib\\Model\\DeviceModel.cs",
               "RelativeToolTip": "IIoTSim.Lib\\Model\\DeviceModel.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAIAwwD4AAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAACcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-08T19:00:07.844Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "SimulationServer.cs",
               "DocumentMoniker": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\IIoTSim\\IIoTSim.Lib\\SimulationServer.cs",
               "RelativeDocumentMoniker": "IIoTSim.Lib\\SimulationServer.cs",
               "ToolTip": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\IIoTSim\\IIoTSim.Lib\\SimulationServer.cs",
               "RelativeToolTip": "IIoTSim.Lib\\SimulationServer.cs",
-              "ViewState": "AgIAADUAAAAAAAAAAIAwwNoAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAALkAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-08T18:57:58.137Z",
               "EditorCaption": ""
@@ -105,8 +104,7 @@
               "RelativeToolTip": "IIoTSim.Lib\\Model\\Enums\\DeviceError.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-11T22:04:30.111Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-11T22:04:30.111Z"
             },
             {
               "$type": "Document",
@@ -118,8 +116,7 @@
               "RelativeToolTip": "IIoTSim.Lib\\Model\\Enums\\ProductionStatus.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-11T22:04:31.939Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-11T22:04:31.939Z"
             },
             {
               "$type": "Document",
@@ -131,8 +128,7 @@
               "RelativeToolTip": "IIoTSim.Desktop\\Converters\\ProductionStatusConverter.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAIA9wAAAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-11T15:49:44.775Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-11T15:49:44.775Z"
             },
             {
               "$type": "Document",
@@ -144,8 +140,7 @@
               "RelativeToolTip": "IIoTSim.Lib\\SimulationEngine.cs",
               "ViewState": "AgIAAA4AAAAAAAAAAAApwDIAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-08T18:57:58.13Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-08T18:57:58.13Z"
             }
           ]
         }

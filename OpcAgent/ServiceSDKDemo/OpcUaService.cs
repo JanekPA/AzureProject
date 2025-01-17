@@ -4,6 +4,8 @@ using Opc.UaFx.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using IoTAgent.Services;
+using Microsoft.Azure.Devices;
 
 namespace IoTAgent.Services
 {
@@ -12,7 +14,7 @@ namespace IoTAgent.Services
         private readonly OpcClient _client;
         private bool _isConnected = false; // Flaga monitorująca stan połączenia
         private Dictionary<int, int> _lastDeviceErrors = new();
-
+        
         public OpcUaService(string endpoint)
         {
             _client = new OpcClient(endpoint);
@@ -52,6 +54,7 @@ namespace IoTAgent.Services
 
                     // Aktualizacja Reported Device Twin
                     await updateReportedTwinAsync(currentErrors);
+
                 }
             }
             catch (Exception ex)
@@ -174,12 +177,16 @@ namespace IoTAgent.Services
 
         public void SetProductionRate(int deviceId, int productionRate)
         {
+            Console.WriteLine($"Setting ProductionRate for Device {deviceId} to {productionRate}.");
             _client.WriteNode($"ns=2;s=Device {deviceId}/ProductionRate", productionRate);
+            Console.WriteLine($"ProductionRate for Device {deviceId} set to {productionRate}%.");
         }
 
         public void EmergencyStop(int deviceId)
         {
+            Console.WriteLine($"Setting EmergencyStop to work...");
             _client.CallMethod($"ns=2;s=Device {deviceId}", $"ns=2;s=Device {deviceId}/EmergencyStop");
+            Console.WriteLine($"Emergency stop working...");
         }
 
         public void ResetErrorStatus(int deviceId)
