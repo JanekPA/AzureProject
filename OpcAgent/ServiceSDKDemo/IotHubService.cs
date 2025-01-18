@@ -12,6 +12,7 @@ using static IoTAgent.Services.Program;
 using System.Linq.Expressions;
 using Microsoft.Win32;
 using Microsoft.Azure.Devices;
+using Azure.Storage.Blobs;
 
 namespace IoTAgent.Services
 {
@@ -21,6 +22,7 @@ namespace IoTAgent.Services
         private readonly RegistryManager registry;
 
 
+
         public IoTHubService(string connectionString)
         {
             _deviceClient = DeviceClient.CreateFromConnectionString(connectionString, Microsoft.Azure.Devices.Client.TransportType.Mqtt);
@@ -28,7 +30,7 @@ namespace IoTAgent.Services
         }
 
         // This method sends telemetry data to the cloud
-        public async Task SendTelemetryAsync(dynamic telemetryData)
+        public async Task SendTelemetryAsync(dynamic telemetryData, AzureStorageService storageService, string BlobContainerName, string deviceId)
         {
             var messageString = JsonConvert.SerializeObject(telemetryData);
             var message = new Microsoft.Azure.Devices.Client.Message(Encoding.UTF8.GetBytes(messageString))
@@ -38,7 +40,9 @@ namespace IoTAgent.Services
             };
 
             await _deviceClient.SendEventAsync(message);
-            Console.WriteLine("Telemetry sent: " + messageString);
+            string blobName = $"Device{deviceId}telemetry_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
+            await storageService.UploadJsonAsync(BlobContainerName, blobName, messageString);
+            Console.WriteLine("\nTelemetry sent! ");
         }
 
         public async Task ReceiveCloudToDeviceMessagesAsync(CancellationToken cancellationToken)
@@ -46,7 +50,7 @@ namespace IoTAgent.Services
 
             try
             {
-                Console.WriteLine("Starting to listen for Cloud-to-Device messages...");
+                Console.WriteLine("Listening for Cloud-to-Device messages...");
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     var message = await _deviceClient.ReceiveAsync(TimeSpan.FromSeconds(2));
@@ -65,12 +69,12 @@ namespace IoTAgent.Services
             }
         }
 
-        public async Task InitializeDirectMethodsAsync(Func<string, Task> handleEmergencyStop, Func<Task> handleResetErrorStatus, Func<int, Task> handleSetProductionRate)
+        public async Task InitializeDirectMethodsAsync(Func<Task> handleEmergencyStop, Func<Task> handleResetErrorStatus, Func<int, Task> handleSetProductionRate)
         {
             await _deviceClient.SetMethodHandlerAsync("EmergencyStop", async (request, context) =>
             {
                 Console.WriteLine("Emergency Stop triggered.");
-                await handleEmergencyStop(request.DataAsJson);
+                await handleEmergencyStop();
                 return new MethodResponse(200);
             }, null);
 
@@ -91,6 +95,7 @@ namespace IoTAgent.Services
 
             Console.WriteLine("Direct methods initialized.");
         }
+
         public async Task MonitorProductionRateAsync(int deviceId, Func<int, Task> updateReportedTwinAsync)
         {
             try
@@ -200,4 +205,32 @@ namespace IoTAgent.Services
         SensorFailue = 4,
         Unknown = 8
     }
+    public class AzureStorageService
+    {
+        private readonly BlobServiceClient _blobServiceClient;
+
+        public AzureStorageService(string connectionString)
+        {
+            _blobServiceClient = new BlobServiceClient(connectionString);
+        }
+
+        public async Task UploadJsonAsync(string containerName, string blobName, string jsonData)
+        {
+            // Uzyskaj klienta kontenera
+            var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+
+            // Upewnij się, że kontener istnieje
+            await containerClient.CreateIfNotExistsAsync();
+
+            // Utwórz klienta blobu
+            var blobClient = containerClient.GetBlobClient(blobName);
+
+            // Prześlij dane
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(jsonData));
+            await blobClient.UploadAsync(stream, overwrite: true);
+
+            Console.WriteLine($"Blob uploaded: {blobName}");
+        }
+    }
+
 }

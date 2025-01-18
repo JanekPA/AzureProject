@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IoTAgent.Services;
 using Microsoft.Azure.Devices;
+using static IoTAgent.Services.Program;
 
 namespace IoTAgent.Services
 {
@@ -87,7 +88,6 @@ namespace IoTAgent.Services
                     // Jeśli typ jest nieoczekiwany, zgłoś wyjątek lub zignoruj błąd
                     throw new InvalidOperationException($"Unexpected ProductionStatus type: {productionStatusNode.Value?.GetType()}");
                 }
-
                 return new Program.DeviceState
                 {
                     DeviceId = deviceId,
@@ -140,7 +140,7 @@ namespace IoTAgent.Services
                 var devices = new List<string>();
                 foreach (var node in rootNode.Children())
                 {
-                    if (node.DisplayName.Value.Contains("Device"))
+                    if (node.DisplayName.Value.Contains("DeviceDemoSdk"))
                     {
                         devices.Add(node.DisplayName.Value);
                     }
@@ -184,7 +184,7 @@ namespace IoTAgent.Services
 
         public void EmergencyStop(int deviceId)
         {
-            Console.WriteLine($"Setting EmergencyStop to work...");
+            Console.WriteLine($"Setting EmergencyStop for Device {deviceId} to work...");
             _client.CallMethod($"ns=2;s=Device {deviceId}", $"ns=2;s=Device {deviceId}/EmergencyStop");
             Console.WriteLine($"Emergency stop working...");
         }

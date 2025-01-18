@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{0CB3C7D0-321B-499A-A368-EB77A628DDDA}|ServiceSDKDemo\\IoTAgent.Services.csproj|c:\\users\\forxo\\documents\\github\\azureproject\\opcagent\\servicesdkdemo\\opcuaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0CB3C7D0-321B-499A-A368-EB77A628DDDA}|ServiceSDKDemo\\IoTAgent.Services.csproj|solutionrelative:servicesdkdemo\\opcuaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{0CB3C7D0-321B-499A-A368-EB77A628DDDA}|ServiceSDKDemo\\IoTAgent.Services.csproj|c:\\users\\forxo\\documents\\github\\azureproject\\opcagent\\servicesdkdemo\\iothubservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0CB3C7D0-321B-499A-A368-EB77A628DDDA}|ServiceSDKDemo\\IoTAgent.Services.csproj|solutionrelative:servicesdkdemo\\iothubservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0CB3C7D0-321B-499A-A368-EB77A628DDDA}|ServiceSDKDemo\\IoTAgent.Services.csproj|c:\\users\\forxo\\documents\\github\\azureproject\\opcagent\\servicesdkdemo\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0CB3C7D0-321B-499A-A368-EB77A628DDDA}|ServiceSDKDemo\\IoTAgent.Services.csproj|solutionrelative:servicesdkdemo\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0CB3C7D0-321B-499A-A368-EB77A628DDDA}|ServiceSDKDemo\\IoTAgent.Services.csproj|c:\\users\\forxo\\documents\\github\\azureproject\\opcagent\\servicesdkdemo\\opcuaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CB3C7D0-321B-499A-A368-EB77A628DDDA}|ServiceSDKDemo\\IoTAgent.Services.csproj|solutionrelative:servicesdkdemo\\opcuaservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0CB3C7D0-321B-499A-A368-EB77A628DDDA}|ServiceSDKDemo\\IoTAgent.Services.csproj|c:\\users\\forxo\\documents\\github\\azureproject\\opcagent\\servicesdkdemo\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -26,43 +26,43 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "IotHubService.cs",
               "DocumentMoniker": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo\\IotHubService.cs",
               "RelativeDocumentMoniker": "ServiceSDKDemo\\IotHubService.cs",
               "ToolTip": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo\\IotHubService.cs",
               "RelativeToolTip": "ServiceSDKDemo\\IotHubService.cs",
-              "ViewState": "AgIAADoAAAAAAAAAAAAswEYAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAANMAAAAAAAAAAAAowOwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-13T17:35:06.357Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "OpcUaService.cs",
               "DocumentMoniker": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo\\OpcUaService.cs",
               "RelativeDocumentMoniker": "ServiceSDKDemo\\OpcUaService.cs",
               "ToolTip": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo\\OpcUaService.cs",
               "RelativeToolTip": "ServiceSDKDemo\\OpcUaService.cs",
-              "ViewState": "AgIAALAAAAAAAAAAAAAowLIAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAK4AAAAAAAAAAAAQwLwAAAA8AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-13T17:34:16.441Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo\\Program.cs",
               "RelativeDocumentMoniker": "ServiceSDKDemo\\Program.cs",
               "ToolTip": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo\\Program.cs",
               "RelativeToolTip": "ServiceSDKDemo\\Program.cs",
-              "ViewState": "AgIAAB0AAAAAAAAAAAAewCsAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAGgAAAAAAAAAAAAmwHkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-11T14:16:24.393Z",
               "EditorCaption": ""
@@ -75,9 +75,10 @@
               "RelativeDocumentMoniker": "ServiceSDKDemo\\appsettings.json",
               "ToolTip": "C:\\Users\\Forxo\\Documents\\GitHub\\AzureProject\\OpcAgent\\ServiceSDKDemo\\appsettings.json",
               "RelativeToolTip": "ServiceSDKDemo\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAArAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-01-11T20:46:58.95Z"
+              "WhenOpened": "2025-01-11T20:46:58.95Z",
+              "EditorCaption": ""
             }
           ]
         }
