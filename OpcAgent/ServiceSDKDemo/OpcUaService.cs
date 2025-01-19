@@ -42,7 +42,9 @@ namespace IoTAgent.Services
                 }
             }
         }
-        public async Task CheckAndUpdateDeviceErrorsAsync(int deviceId, Func<int, Task> updateReportedTwinAsync)
+
+
+        public async Task MonitorDeviceErrorsAsync(int deviceId, Func<int, Task> onDeviceErrorsChanged)
         {
             try
             {
@@ -53,16 +55,16 @@ namespace IoTAgent.Services
                     _lastDeviceErrors[deviceId] = currentErrors;
                     Console.WriteLine($"Device {deviceId} errors changed: {AnalyzeErrors(currentErrors)}");
 
-                    // Aktualizacja Reported Device Twin
-                    await updateReportedTwinAsync(currentErrors);
-
+                    // Wywołanie funkcji, gdy wykryto zmianę w DeviceErrors
+                    await onDeviceErrorsChanged(currentErrors);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error updating device errors for Device {deviceId}: {ex.Message}");
+                Console.WriteLine($"Error monitoring device errors for Device {deviceId}: {ex.Message}");
             }
         }
+
         public Program.DeviceState ReadDeviceState(int deviceId)
         {
             try
@@ -103,16 +105,16 @@ namespace IoTAgent.Services
             }
         }
 
-        private string AnalyzeErrors(int deviceErrors)
+        public List<string> AnalyzeErrors(int deviceErrors)
         {
             List<string> errors = new();
 
             if ((deviceErrors & Convert.ToInt32(Errors.Unknown)) != 0) errors.Add("Unknown");
-            if ((deviceErrors & Convert.ToInt32(Errors.SensorFailue)) != 0) errors.Add("Sensor Failure");
+            if ((deviceErrors & Convert.ToInt32(Errors.SensorFailure)) != 0) errors.Add("Sensor Failure");
             if ((deviceErrors & Convert.ToInt32(Errors.PowerFailure)) != 0) errors.Add("Power Failure");
             if ((deviceErrors & Convert.ToInt32(Errors.EmergencyStop)) != 0) errors.Add("Emergency Stop");
 
-            return errors.Count > 0 ? string.Join(", ", errors) : "No errors";
+            return errors.Count > 0 ? errors : new List<string> { "No errors" };
         }
 
         public void Disconnect()
@@ -138,11 +140,14 @@ namespace IoTAgent.Services
                 var rootNode = _client.BrowseNode(OpcObjectTypes.ObjectsFolder);
 
                 var devices = new List<string>();
+                int deviceIndex = 1;
                 foreach (var node in rootNode.Children())
                 {
-                    if (node.DisplayName.Value.Contains("DeviceDemoSdk"))
+                    if (node.DisplayName.Value.Contains("Device"))
                     {
-                        devices.Add(node.DisplayName.Value);
+                        string deviceId = $"DeviceDemoSdk{deviceIndex}";
+                        devices.Add(deviceId);
+                        deviceIndex++;
                     }
                 }
 
@@ -160,6 +165,7 @@ namespace IoTAgent.Services
             {
                 return new
                 {
+                    DeviceID=deviceId,
                     ProductionStatus = _client.ReadNode($"ns=2;s=Device {deviceId}/ProductionStatus").Value,
                     GoodCount = _client.ReadNode($"ns=2;s=Device {deviceId}/GoodCount").Value,
                     BadCount = _client.ReadNode($"ns=2;s=Device {deviceId}/BadCount").Value,

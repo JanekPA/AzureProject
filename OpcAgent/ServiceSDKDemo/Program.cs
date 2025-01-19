@@ -23,88 +23,118 @@ namespace IoTAgent.Services
                 Console.WriteLine("Configuration loading failed.");
                 return;
             }
-            else
+            Console.WriteLine("Configuration loaded successfully.");
+
+            // Initialize services
+            var opcUaService = new OpcUaService(config.OpcUaEndpoint);
+            opcUaService.Connect();
+
+            var devices = opcUaService.GetDeviceNodes().ToList();
+            if (!devices.Any())
             {
-                Console.WriteLine("Configuration loaded succesfully.");
+                Console.WriteLine("No devices found on the OPC UA server.");
+                return;
             }
-            var storageService = new AzureStorageService(config.StorageConnectionString);
-            // Initialize devices and services
-            var devices = new Dictionary<string, (OpcUaService opcUaService, IoTHubService iotHubService)>();
-            foreach (var (deviceId, connectionString) in config.IoTHubConnectionStrings)
+            Console.WriteLine("Available devices:");
+            for (int i = 0; i < devices.Count; i++)
             {
-                var opcUaService = new OpcUaService(config.OpcUaEndpoint);
-                var iotHubService = new IoTHubService(connectionString);
-
-
-                opcUaService.Connect();
-                await iotHubService.InitializeDirectMethodsAsync(
-                    async () => opcUaService.EmergencyStop(int.Parse(deviceId.Replace("DeviceDemoSdk",""))),
-                    async () => opcUaService.ResetErrorStatus(int.Parse(deviceId.Replace("DeviceDemoSdk", ""))),
-                    async rate => opcUaService.SetProductionRate(int.Parse(deviceId.Replace("DeviceDemoSdk", "")), rate)
-                );
-
-                devices.Add(deviceId, (opcUaService, iotHubService));
+                Console.WriteLine($"{i + 1}. {devices[i]}");
             }
 
-            // Start telemetry and twin monitoring for each device
+            Console.Write("Select a device by entering the corresponding number: ");
+            if (!int.TryParse(Console.ReadLine(), out int selectedDeviceIndex) || selectedDeviceIndex < 1 || selectedDeviceIndex > devices.Count)
+            {
+                Console.WriteLine("Invalid selection.");
+                return;
+            }
+
+            string selectedDeviceId = devices[selectedDeviceIndex - 1];
+            int deviceId = int.Parse(selectedDeviceId.Replace("DeviceDemoSdk", ""));
+            Console.WriteLine($"You selected: {selectedDeviceId}");
+
+            if (!config.IoTHubConnectionStrings.TryGetValue(selectedDeviceId, out string deviceConnectionString))
+            {
+                Console.WriteLine($"No IoT Hub connection string found for {selectedDeviceId}.");
+                return;
+            }
+
+            var iotHubService = new IoTHubService(deviceConnectionString);
+            await iotHubService.InitializeDirectMethodsAsync(
+                async () => opcUaService.EmergencyStop(deviceId),
+                async () => opcUaService.ResetErrorStatus(deviceId),
+                async rate => opcUaService.SetProductionRate(deviceId, rate)
+            );
+
             CancellationTokenSource cts = new();
-            var tasks = new List<Task>();
-
-            foreach (var kvp in devices)
+            Task telemetryTask = Task.Run(async () =>
             {
-                var deviceId = kvp.Key;
-                var (opcUaService, iotHubService) = kvp.Value;
-
-                tasks.Add(Task.Run(async () =>
+                while (!cts.Token.IsCancellationRequested)
                 {
-                    while (!cts.Token.IsCancellationRequested)
+                    try
                     {
-                        // Read telemetry data
-                        var telemetryData = opcUaService.ReadTelemetryData(int.Parse(deviceId.Replace("DeviceDemoSdk", "")));
+                        await opcUaService.MonitorDeviceErrorsAsync(deviceId, async (newErrors) =>
+                        {
+                            // Wyślij wiadomość D2C z nowymi błędami
+                            var analyzedErrors = opcUaService.AnalyzeErrors(newErrors);
+                            await iotHubService.SendDeviceErrorsTelemetryAsync(deviceId, analyzedErrors);
+
+                            // Aktualizacja reported properties na podstawie nowych błędów
+                            var reportedProperties = new Dictionary<string, object>
+                            {
+                                { "DeviceErrors", analyzedErrors }
+                            };
+
+                            // Aktualizacja Device Twin w IoT Hub
+                            await iotHubService.UpdateReportedPropertiesAsync(reportedProperties);
+                        });
+                        var telemetryData = opcUaService.ReadTelemetryData(deviceId);
                         if (telemetryData != null)
                         {
-                            await iotHubService.SendTelemetryAsync(telemetryData, storageService, config.BlobContainerName, deviceId);
+                            await iotHubService.SendTelemetryAsync(telemetryData, new AzureStorageService(config.StorageConnectionString), config.BlobContainerName, int.Parse(selectedDeviceId.Replace("DeviceDemoSdk", "")));
                         }
-                        iotHubService.ReceiveCloudToDeviceMessagesAsync(cts.Token);
 
-                        // Monitor device twin properties
-                        var deviceState = opcUaService.ReadDeviceState(int.Parse(deviceId.Replace("DeviceDemoSdk", "")));
+                        var deviceState = opcUaService.ReadDeviceState(deviceId);
                         if (deviceState != null)
                         {
                             await iotHubService.MonitorDeviceTwinAsync(opcUaService, deviceState.DeviceId);
-                            string stateBlobName = $"Device {deviceId}: state_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
-                            Console.WriteLine("StorageConnectionString: " + config.StorageConnectionString);
+                            string stateBlobName = $"Device{deviceState.DeviceId}_state_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
                             string stateJsonData = JsonSerializer.Serialize(deviceState);
+                            var storageService = new AzureStorageService(config.StorageConnectionString);
                             await storageService.UploadJsonAsync(config.BlobContainerName, stateBlobName, stateJsonData);
                         }
 
-                        await Task.Delay(config.TelemetryInterval);
+                        iotHubService.ReceiveCloudToDeviceMessagesAsync(cts.Token);
                     }
-                }, cts.Token));
-            }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error during telemetry task: {ex.Message}");
+                    }
 
-            // Await tasks and handle cancellation
+                    await Task.Delay(config.TelemetryInterval);
+                }
+            }, cts.Token);
+
+            Console.WriteLine("Press Enter to stop...");
+            Console.ReadLine();
+
+            cts.Cancel();
             try
             {
-                await Task.WhenAll(tasks);
+                await telemetryTask;
             }
-            catch (Exception ex)
+            catch (OperationCanceledException)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine("Telemetry task canceled.");
             }
             finally
             {
-                // Cleanup
-                foreach (var (_, (opcUaService, _)) in devices)
-                {
-                    opcUaService.Disconnect();
-                }
+                opcUaService.Disconnect();
             }
         }
         public class DeviceState
         {
             public int DeviceId { get; set; }
-            public string DeviceErrors { get; set; } = string.Empty;
+            public List<string> DeviceErrors { get; set; } = null;
             public bool IsOperational { get; set; }
             public int CurrentProductionRate { get; set; }
         }
