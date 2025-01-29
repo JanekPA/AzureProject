@@ -2,18 +2,11 @@
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Shared;
 using Newtonsoft.Json;
-using Opc.UaFx.Client;
-using System;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using IoTAgent;
-using static IoTAgent.Services.Program;
-using System.Linq.Expressions;
-using Microsoft.Win32;
 using Microsoft.Azure.Devices;
 using Azure.Storage.Blobs;
-using System.Text.Json;
+using Azure.Messaging.ServiceBus;
+using System;
 
 namespace IoTAgent.Services
 {
@@ -21,13 +14,141 @@ namespace IoTAgent.Services
     {
         private readonly DeviceClient _deviceClient;
         private readonly RegistryManager registry;
+        private readonly Dictionary<string, ServiceBusProcessor> _processors = new();
+        private readonly ServiceBusClient _serviceBusClient;
+        private readonly ServiceBusProcessor _processor;
+        private readonly string _queueName;
 
 
-
-        public IoTHubService(string connectionString)
+        public IoTHubService(string connectionString, Dictionary<string, string> queueNames, string communicationString)
         {
             _deviceClient = DeviceClient.CreateFromConnectionString(connectionString, Microsoft.Azure.Devices.Client.TransportType.Mqtt);
+            _serviceBusClient = new ServiceBusClient(communicationString);
+
+            foreach (var queueName in queueNames.Keys)
+            {
+                var processor = _serviceBusClient.CreateProcessor(queueName, new ServiceBusProcessorOptions());
+                _processors.Add(queueName, processor);
+            }
+            Console.WriteLine("Service bus processors created for all queues.");
             Console.WriteLine("Device client created successfully.");
+        }
+
+
+        public void RegisterQueueHandlers(Dictionary<string, Func<ServiceBusReceivedMessage, Task>> queueHandlers)
+        {
+
+            foreach (var kvp in queueHandlers)
+            {
+                if (_processors.TryGetValue(kvp.Key, out var processor))
+                {
+                    processor.ProcessMessageAsync += async args =>
+                    {
+                        await kvp.Value(args.Message);
+                        await args.CompleteMessageAsync(args.Message);
+                    };
+
+                    processor.ProcessErrorAsync += args =>
+                    {
+                        Console.WriteLine($"Error processing queue {kvp.Key}: {args.Exception.Message}");
+                        return Task.CompletedTask;
+                    };
+                }
+            }
+
+            Console.WriteLine("Handlers registered for all queues.");
+        }
+        public async Task<List<ServiceBusReceivedMessage>> ReceiveQueueMessagesAsync(string queueName)
+        {
+            var messagesList = new List<ServiceBusReceivedMessage>();
+
+            if (_processors.TryGetValue(queueName, out var processor))
+            {
+                var receiver = _serviceBusClient.CreateReceiver(queueName);
+
+                try
+                {
+                    var receivedMessages = await receiver.ReceiveMessagesAsync(maxMessages: 10, maxWaitTime: TimeSpan.FromSeconds(2)); // ⏳ Timeout 2 sekundy
+
+                    if (receivedMessages.Any())
+                    {
+                        foreach (var message in receivedMessages)
+                        {
+                            messagesList.Add(message);
+                            await receiver.CompleteMessageAsync(message); // ✅ Oznaczamy wiadomość jako przetworzoną
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error receiving messages from {queueName}: {ex.Message}");
+                }
+            }
+
+            return messagesList;
+        }
+
+
+        public async Task ProcessQueueMessage(ServiceBusReceivedMessage message, OpcUaService opcUaService, string AlertEmail, string CommString)
+        {
+            
+            var messageBody = Encoding.UTF8.GetString(message.Body);
+            var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(messageBody);
+
+            if (data.TryGetValue("ActionType", out string actionType) && data.TryGetValue("DeviceId", out string deviceIdStr))
+            {
+
+                int deviceId = int.Parse(deviceIdStr);
+                switch (actionType)
+                {
+                    case "EmergencyStop":
+                        opcUaService.EmergencyStop(deviceId);
+                        Console.WriteLine($"EmergencyStop executed for Device {deviceId}");
+                        break;
+
+                    case "DecreaseProductionRate":
+                        int currentRate = opcUaService.GetProductionRate(deviceId);
+
+                        opcUaService.SetProductionRate(deviceId, currentRate-10);
+                        Console.WriteLine($"ProductionRate decreased from {currentRate} to {currentRate-10} for Device {deviceId}");
+                        break;
+
+                    case "SendEmail":
+                        string errorMessage = $"Device {deviceId} reported {data["total_error_count"]} errors.";
+                        await opcUaService.SendEmailAsync(AlertEmail, $"Device {deviceId} Error Alert", errorMessage, CommString);
+                        Console.WriteLine($"Email sent for Device {deviceId}");
+                        break;
+
+                    default:
+                        Console.WriteLine($"Unknown ActionType: {actionType}");
+                        break;
+                }
+
+            }
+
+        }
+
+
+        public async Task StartQueueListenerAsync(string queueName)
+        {
+            if (_processors.TryGetValue(queueName, out var processor))
+            {
+                await processor.StartProcessingAsync();
+                Console.WriteLine($"Listening to queue: {queueName}");
+            }
+            else
+            {
+                Console.WriteLine($"Queue {queueName} not found.");
+            }
+        }
+
+        public async Task StopQueueListenerAsync()
+        {
+            foreach (var processor in _processors.Values)
+            {
+                await processor.StopProcessingAsync();
+                
+            }
         }
 
         // This method sends telemetry data to the cloud
@@ -51,19 +172,18 @@ namespace IoTAgent.Services
                 ContentType = "application/json",
                 ContentEncoding = "utf-8"
             };
-
+            
             await _deviceClient.SendEventAsync(message);
-            string blobName = $"Device{deviceId}telemetry_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
+            string blobName = $"Device{deviceId}_telemetry.json";
             await storageService.UploadJsonAsync(BlobContainerName, blobName, messageString);
             //Console.WriteLine("\nTelemetry sent! ");
         }
-
         public async Task ReceiveCloudToDeviceMessagesAsync(CancellationToken cancellationToken)
         {
 
             try
             {
-                Console.WriteLine("Listening for Cloud-to-Device messages...");
+                //Console.WriteLine("Listening for Cloud-to-Device messages...");
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     var message = await _deviceClient.ReceiveAsync(TimeSpan.FromSeconds(2));
@@ -144,6 +264,11 @@ namespace IoTAgent.Services
 
         public async Task SendDeviceErrorsTelemetryAsync(int deviceId, List<string> deviceErrors)
         {
+            if (deviceErrors == null || !deviceErrors.Any())
+            {
+                Console.WriteLine("No errors to report.");
+                return;
+            }
             var telemetryData = new
             {
                 DeviceId = deviceId,

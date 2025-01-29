@@ -1,13 +1,9 @@
-﻿using Azure.Storage.Blobs;
-using IoTAgent.Services;
-using Microsoft.Azure.Devices;
-using Microsoft.Azure.Devices.Shared;
-using Opc.UaFx.Client;
-using System;
-using System.IO;
+﻿using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
+using Azure.Messaging.ServiceBus;
+using Newtonsoft.Json;
+
+
 
 namespace IoTAgent.Services
 {
@@ -16,7 +12,7 @@ namespace IoTAgent.Services
         public static async Task Main(string[] args)
         {
             // Load configuration
-            var config = JsonSerializer.Deserialize<Config>(File.ReadAllText("appsettings.json"));
+            var config = System.Text.Json.JsonSerializer.Deserialize<Config>(File.ReadAllText("appsettings.json"));
 
             if (config == null)
             {
@@ -58,12 +54,45 @@ namespace IoTAgent.Services
                 return;
             }
 
-            var iotHubService = new IoTHubService(deviceConnectionString);
+            var queueNames = new Dictionary<string, string>
+{
+                { "blogicqueueprate", "DecreaseProductionRateQueue" },
+                { "blogicqueueerror", "EmergencyStopQueue" },
+                { "blogicqueue", "SendEmailQueue" }
+            };
+            var iotHubService = new IoTHubService(deviceConnectionString, queueNames, config.CommunicationString);
+
             await iotHubService.InitializeDirectMethodsAsync(
                 async () => opcUaService.EmergencyStop(deviceId),
                 async () => opcUaService.ResetErrorStatus(deviceId),
                 async rate => opcUaService.SetProductionRate(deviceId, rate)
             );
+            var queueHandlers = new Dictionary<string, Func<ServiceBusReceivedMessage, Task>>
+            {
+                { "blogicqueueprate", async message =>
+                    {
+                        Console.WriteLine("Processing message from blogicqueueprate...");
+                        await iotHubService.ProcessQueueMessage(message, opcUaService, config.AlertEmail, config.CommString);
+                    }
+                },
+                { "blogicqueueerror", async message =>
+                    {
+                        Console.WriteLine("Processing message from blogicqueueerror...");
+                        await iotHubService.ProcessQueueMessage(message, opcUaService, config.AlertEmail, config.CommString);
+                    }
+                },
+                { "blogicqueue", async message =>
+                    {
+                        Console.WriteLine("Processing message from blogicqueue...");
+                        await iotHubService.ProcessQueueMessage(message, opcUaService, config.AlertEmail, config.CommString);
+                    }
+                }
+            };
+
+            // Zarejestruj handlery dla każdej kolejki
+            iotHubService.RegisterQueueHandlers(queueHandlers);
+
+
 
             CancellationTokenSource cts = new();
             Task telemetryTask = Task.Run(async () =>
@@ -72,12 +101,17 @@ namespace IoTAgent.Services
                 {
                     try
                     {
+                        // Uruchom procesory dla każdej kolejki
+                        foreach (var queueName in queueHandlers.Keys)
+                        {
+                            await iotHubService.StartQueueListenerAsync(queueName);
+                        }
                         await opcUaService.MonitorDeviceErrorsAsync(deviceId, async (newErrors) =>
                         {
                             // Wyślij wiadomość D2C z nowymi błędami
                             var analyzedErrors = opcUaService.AnalyzeErrors(newErrors);
                             await iotHubService.SendDeviceErrorsTelemetryAsync(deviceId, analyzedErrors);
-
+                            
                             // Aktualizacja reported properties na podstawie nowych błędów
                             var reportedProperties = new Dictionary<string, object>
                             {
@@ -97,13 +131,32 @@ namespace IoTAgent.Services
                         if (deviceState != null)
                         {
                             await iotHubService.MonitorDeviceTwinAsync(opcUaService, deviceState.DeviceId);
-                            string stateBlobName = $"Device{deviceState.DeviceId}_state_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
-                            string stateJsonData = JsonSerializer.Serialize(deviceState);
+                            string stateBlobName = $"Device{deviceState.DeviceId}_state.json";
+                            string stateJsonData = System.Text.Json.JsonSerializer.Serialize(deviceState);
                             var storageService = new AzureStorageService(config.StorageConnectionString);
                             await storageService.UploadJsonAsync(config.BlobContainerName, stateBlobName, stateJsonData);
                         }
-
+                        Console.WriteLine("Listening for Cloud-to-Devices messages for "+ selectedDeviceId);
                         iotHubService.ReceiveCloudToDeviceMessagesAsync(cts.Token);
+                        bool messagesProcessed = false;
+                        foreach (var queueName in queueHandlers.Keys)
+                        {
+                            var messages = await iotHubService.ReceiveQueueMessagesAsync(queueName); // Pobieramy wiadomości z Service Bus
+                            if(messages.Any()) messagesProcessed = true;
+                            foreach (var message in messages)
+                            {
+                                Console.WriteLine($"Processing message from {queueName}...");
+                                await iotHubService.ProcessQueueMessage(message, opcUaService, config.AlertEmail, config.CommString); // Przetwarzamy wiadomość
+                            }
+                        }
+                       
+                        if (!messagesProcessed)
+                        {
+                            await Task.Delay(500); // Oczekujemy 0.5 sekundy, żeby nie sprawdzać pustych kolejek w kółko
+                        }
+                        //Console.ReadLine();
+                        await iotHubService.StopQueueListenerAsync();
+
                     }
                     catch (Exception ex)
                     {
@@ -142,7 +195,10 @@ namespace IoTAgent.Services
         {
             public string OpcUaEndpoint { get; set; } = "";
             public Dictionary<string, string> IoTHubConnectionStrings { get; set; } = new();
-            public int DeviceId { get; set; } = 1;
+            public string QueueName { get; set; } = "";
+            public string AlertEmail { get; set; } = "";
+            public string CommunicationString { get; set; } = "";
+            public string CommString { get; set; } = "";
             public string StorageConnectionString { get; set; } = string.Empty;
 
             public int TelemetryInterval { get; set; } = 5000;

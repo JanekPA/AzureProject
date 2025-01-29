@@ -1,12 +1,8 @@
 ﻿// OpcUaService.cs
+using Azure;
+using Azure.Communication.Email;
 using Opc.UaFx;
 using Opc.UaFx.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using IoTAgent.Services;
-using Microsoft.Azure.Devices;
-using static IoTAgent.Services.Program;
 
 namespace IoTAgent.Services
 {
@@ -42,7 +38,43 @@ namespace IoTAgent.Services
                 }
             }
         }
+        public int GetProductionRate(int deviceId)
+        {
+            try
+            {
+                var productionRateNode = _client.ReadNode($"ns=2;s=Device {deviceId}/ProductionRate");
+                return Convert.ToInt32(productionRateNode.Value);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading ProductionRate for Device {deviceId}: {ex.Message}");
+                return 0; // W razie błędu ustaw domyślną wartość 0
+            }
+        }
+        public async Task SendEmailAsync(string toEmail, string subject, string body, string communicationString)
+        {
+            // Podaj Connection String z Azure Communication Services
+            string connectionString = communicationString;
 
+            var emailClient = new EmailClient(connectionString);
+            var emailContent = new EmailContent(subject)
+            {
+                PlainText = body
+            };
+
+            var emailMessage = new EmailMessage("DoNotReply@bf4cbd14-ada5-474c-9381-f7e73f53926d.azurecomm.net", toEmail, emailContent);
+
+            try
+            {
+                // Poprawne wywołanie bez użycia typów powodujących błędy
+                var response = await emailClient.SendAsync(WaitUntil.Completed, emailMessage);
+                Console.WriteLine($"Email sent successfully. Status: {response.HasCompleted}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to send email: {ex.Message}");
+            }
+        }
 
         public async Task MonitorDeviceErrorsAsync(int deviceId, Func<int, Task> onDeviceErrorsChanged)
         {
@@ -53,10 +85,14 @@ namespace IoTAgent.Services
                 if (!_lastDeviceErrors.TryGetValue(deviceId, out var lastErrors) || currentErrors != lastErrors)
                 {
                     _lastDeviceErrors[deviceId] = currentErrors;
-                    Console.WriteLine($"Device {deviceId} errors changed: {AnalyzeErrors(currentErrors)}");
+                    var errorDescriptions = string.Join(", ", AnalyzeErrors(currentErrors));
+                    if (errorDescriptions != "No errors")
+                    {
+                        Console.WriteLine($"Device {deviceId} errors changed: {errorDescriptions}");
 
-                    // Wywołanie funkcji, gdy wykryto zmianę w DeviceErrors
-                    await onDeviceErrorsChanged(currentErrors);
+                        // Wywołanie funkcji, gdy wykryto zmianę w DeviceErrors
+                        await onDeviceErrorsChanged(currentErrors);
+                    }
                 }
             }
             catch (Exception ex)

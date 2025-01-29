@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ServiceSDKDemo.Library")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d3ecb800c8ec72e8723208d06da391802d26aa54")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d5fc22cb8267791ae8e63050eac2ff096c9a2214")]
 [assembly: System.Reflection.AssemblyProductAttribute("ServiceSDKDemo.Library")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ServiceSDKDemo.Library")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

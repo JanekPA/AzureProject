@@ -63,3 +63,8 @@ C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo\obj\Debug\n
 C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo\obj\Debug\net8.0\IoTAgent.Services.pdb
 C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo\obj\Debug\net8.0\IoTAgent.Services.genruntimeconfig.cache
 C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo\obj\Debug\net8.0\ref\IoTAgent.Services.dll
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo\bin\Debug\net8.0\Azure.Communication.Email.dll
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo\bin\Debug\net8.0\Azure.Core.Amqp.dll
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo\bin\Debug\net8.0\Azure.Messaging.ServiceBus.dll
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo\bin\Debug\net8.0\SendGrid.dll
+C:\Users\Forxo\Documents\GitHub\AzureProject\OpcAgent\ServiceSDKDemo\bin\Debug\net8.0\StarkbankEcdsa.dll
