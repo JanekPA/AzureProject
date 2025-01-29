@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IoTAgent.Services")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d5fc22cb8267791ae8e63050eac2ff096c9a2214")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2b48a83d462d1c37e776b900c2b22a6e871844e8")]
 [assembly: System.Reflection.AssemblyProductAttribute("IoTAgent.Services")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IoTAgent.Services")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

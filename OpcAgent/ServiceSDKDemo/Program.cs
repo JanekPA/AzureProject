@@ -195,7 +195,6 @@ namespace IoTAgent.Services
         {
             public string OpcUaEndpoint { get; set; } = "";
             public Dictionary<string, string> IoTHubConnectionStrings { get; set; } = new();
-            public string QueueName { get; set; } = "";
             public string AlertEmail { get; set; } = "";
             public string CommunicationString { get; set; } = "";
             public string CommString { get; set; } = "";
