@@ -9,7 +9,7 @@ namespace IoTAgent.Services
     public class OpcUaService
     {
         private readonly OpcClient _client;
-        private bool _isConnected = false; // Flaga monitorująca stan połączenia
+        private bool _isConnected = false; 
         private Dictionary<int, int> _lastDeviceErrors = new();
         
         public OpcUaService(string endpoint)
@@ -90,7 +90,7 @@ namespace IoTAgent.Services
                     {
                         Console.WriteLine($"Device {deviceId} errors changed: {errorDescriptions}");
 
-                        // Wywołanie funkcji, gdy wykryto zmianę w DeviceErrors
+                        
                         await onDeviceErrorsChanged(currentErrors);
                     }
                 }
@@ -111,19 +111,18 @@ namespace IoTAgent.Services
                 bool isOperational;
 
 
-                // Konwersja ProductionStatus na bool, jeśli to konieczne
+                
                 if (productionStatusNode.Value is bool statusAsBool)
                 {
                     isOperational = statusAsBool;
                 }
                 else if (productionStatusNode.Value is int statusAsInt)
                 {
-                    // Zakładamy, że 1 oznacza "true", a 0 oznacza "false"
+                    
                     isOperational = statusAsInt != 0;
                 }
                 else
                 {
-                    // Jeśli typ jest nieoczekiwany, zgłoś wyjątek lub zignoruj błąd
                     throw new InvalidOperationException($"Unexpected ProductionStatus type: {productionStatusNode.Value?.GetType()}");
                 }
                 return new Program.DeviceState

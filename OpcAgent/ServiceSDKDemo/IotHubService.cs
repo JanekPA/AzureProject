@@ -68,14 +68,14 @@ namespace IoTAgent.Services
 
                 try
                 {
-                    var receivedMessages = await receiver.ReceiveMessagesAsync(maxMessages: 10, maxWaitTime: TimeSpan.FromSeconds(2)); // ⏳ Timeout 2 sekundy
+                    var receivedMessages = await receiver.ReceiveMessagesAsync(maxMessages: 10, maxWaitTime: TimeSpan.FromSeconds(2)); 
 
                     if (receivedMessages.Any())
                     {
                         foreach (var message in receivedMessages)
                         {
                             messagesList.Add(message);
-                            await receiver.CompleteMessageAsync(message); // ✅ Oznaczamy wiadomość jako przetworzoną
+                            await receiver.CompleteMessageAsync(message); 
                         }
                     }
                 }
@@ -151,10 +151,10 @@ namespace IoTAgent.Services
             }
         }
 
-        // This method sends telemetry data to the cloud
+      
         public async Task SendTelemetryAsync(dynamic telemetryData, AzureStorageService storageService, string BlobContainerName, int deviceId)
         {
-            // Przygotowanie stringa do wyświetlenia danych telemetrycznych po spacji
+            
             string telemetryDataFormatted = string.Join(" ", new[]
             {
         $"\nProductionRate = {telemetryData.ProductionRate}",
@@ -183,7 +183,7 @@ namespace IoTAgent.Services
 
             try
             {
-                //Console.WriteLine("Listening for Cloud-to-Device messages...");
+               
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     var message = await _deviceClient.ReceiveAsync(TimeSpan.FromSeconds(2));
@@ -230,7 +230,7 @@ namespace IoTAgent.Services
         }
 
 
-        // This method listens to changes in device twin properties
+        
         public async Task MonitorDeviceTwinAsync(OpcUaService opcService, int deviceId)
         {
 
@@ -245,13 +245,13 @@ namespace IoTAgent.Services
                         Console.WriteLine($"Production rate updated to {newRate}%.");
 
 
-                        // Teraz aktualizujemy "reported" z nową wartością
+                        
 
                         var reportedProperties = new TwinCollection
                         {
                             ["ProductionRate"] = newRate
                         };
-                        //Console.WriteLine("Updating reported properties...");
+                        
                         await _deviceClient.UpdateReportedPropertiesAsync(reportedProperties);
                         opcService.SetProductionRate(deviceId, newRate);
                         Console.WriteLine("Reported properties updated.");
@@ -259,7 +259,7 @@ namespace IoTAgent.Services
                 }
             }, null);
             var twin = await _deviceClient.GetTwinAsync();
-            //Console.WriteLine("Device Twin monitoring initialized.");
+            
         }
 
         public async Task SendDeviceErrorsTelemetryAsync(int deviceId, List<string> deviceErrors)
@@ -287,7 +287,7 @@ namespace IoTAgent.Services
             Console.WriteLine($"Device {deviceId} error telemetry sent: {messageString}");
         }
 
-        // Update reported properties for ProductionRate and DeviceErrors
+        
         public async Task UpdateReportedPropertiesAsync(Dictionary<string, object> reportedProperties)
         {
             if (reportedProperties == null)
@@ -303,9 +303,9 @@ namespace IoTAgent.Services
 
             await _deviceClient.UpdateReportedPropertiesAsync(twinCollection);
 
-            //Console.WriteLine("Reported properties updated: " + twinCollection.ToJson());
+            
         }
-        // Handle changes to desired properties
+        
 
     }
         [Flags]
@@ -328,20 +328,20 @@ namespace IoTAgent.Services
 
             public async Task UploadJsonAsync(string containerName, string blobName, string jsonData)
             {
-                // Uzyskaj klienta kontenera
+                
                 var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
 
-                // Upewnij się, że kontener istnieje
+                
                 await containerClient.CreateIfNotExistsAsync();
 
-                // Utwórz klienta blobu
+               
                 var blobClient = containerClient.GetBlobClient(blobName);
 
-                // Prześlij dane
+               
                 using var stream = new MemoryStream(Encoding.UTF8.GetBytes(jsonData));
                 await blobClient.UploadAsync(stream, overwrite: true);
 
-                //Console.WriteLine($"Blob uploaded: {blobName}");
+             
             }
         }
 

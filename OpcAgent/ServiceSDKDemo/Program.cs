@@ -101,14 +101,14 @@ namespace IoTAgent.Services
                 {
                     try
                     {
-                        // Uruchom procesory dla każdej kolejki
+                        
                         foreach (var queueName in queueHandlers.Keys)
                         {
                             await iotHubService.StartQueueListenerAsync(queueName);
                         }
                         await opcUaService.MonitorDeviceErrorsAsync(deviceId, async (newErrors) =>
                         {
-                            // Wyślij wiadomość D2C z nowymi błędami
+                            
                             var analyzedErrors = opcUaService.AnalyzeErrors(newErrors);
                             await iotHubService.SendDeviceErrorsTelemetryAsync(deviceId, analyzedErrors);
                             
